@@ -2,9 +2,6 @@
     <string name="app_name">酷工具箱</string>
     <string name="xposed_des">发现应用的乐趣！</string>
 
-    <string name="nav_open">Nav_Open</string>
-    <string name="nav_close">Nav_Close</string>
-
     <string name="text_need_restart">需要重启酷市场才能应用更改</string>
     <string name="action_kill">强制退出</string>
     <string name="err_need_root">需要Root权限</string>
