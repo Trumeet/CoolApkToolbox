@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/app_name">
+        <SwitchPreference
+            android:key="hide_bottom_bar"
+            android:title="@string/settings_hide_bottom_bar"
+            android:defaultValue="false" />
+        <SwitchPreference
+            android:key="disable_splash"
+            android:title="@string/settings_disable_splash"
+            android:defaultValue="false" />
+        <ListPreference
+            android:key="replace_icon"
+            android:title="@string/settings_replace_icon" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/settings_model_settings">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="hide_icon"
+            android:title="@string/settings_hide_icon" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/settings_developers"
+        android:key="developers" />
+    <PreferenceCategory
+        android:title="@string/settings_libs"
+        android:key="libs" />
+</PreferenceScreen>

@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">酷工具箱</string>
+    <string name="xposed_des">发现应用的乐趣！</string>
+
+    <string name="nav_open">Nav_Open</string>
+    <string name="nav_close">Nav_Close</string>
+
+    <string name="text_need_restart">需要重启酷市场才能应用更改</string>
+    <string name="action_kill">强制退出</string>
+    <string name="err_need_root">需要Root权限</string>
+
+    <string name="settings_hide_bottom_bar">隐藏底栏</string>
+    <string name="settings_disable_splash">跳过启动页</string>
+    <string name="settings_replace_icon">替换图标</string>
+    <string name="settings_model_settings">模块设置</string>
+    <string name="settings_hide_icon">隐藏图标</string>
+    <string name="settings_developers">开发者</string>
+    <string name="settings_libs">使用的开源库</string>
+
+    <string name="text_not_change">不做修改</string>
+    <string name="action_restart">重启酷市场</string>
+    <string name="err_not_install"> 未安装酷市场</string>
+    <string name="err_not_support"> 不支持酷市场:%1$s</string>
+    <string name="err_not_active"> 未激活</string>
+    <string name="err">设置失败</string>
+    <string name="text_killed">已强行停止</string>
+
+    <integer-array name="support_cool_apk_version_code">
+        <item>1611022</item>
+        <item>1611082</item>
+    </integer-array>
+    
+    <string-array name="developers">
+        <item>liangyuteng0927>开发者>http://coolapk.com/u/543424</item>
+        <item>iVanilla>开发者>http://coolapk.com/u/651701</item>
+        <item>枫羽柠痕Ice>图标制作>http://coolapk.com/u/482620</item>
+        <item>GitHub>本项目开源在GitHub>Log.d(TAG, "onCreate: Bug upload enable");</item>
+    </string-array>
+
+    <string-array name="libs">
+        <item>libsuperuser>https://github.com/Chainfire/libsuperuser</item>
+        <item>XposedBridge>https://github.com/rovo89/XposedBridge</item>
+        <item>snackbar>https://github.com/MrEngineer13/SnackBar</item>
+    </string-array>
+
+    <string name="err_open_url">无法打开网址</string>
+</resources>
