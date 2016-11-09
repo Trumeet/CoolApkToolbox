@@ -1,4 +1,4 @@
-package kh.android.cool_apk_toolbox.ui;
+package kh.android.cool_apk_toolbox.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;

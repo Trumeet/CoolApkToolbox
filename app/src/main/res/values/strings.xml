@@ -4,15 +4,25 @@
 
     <string name="text_need_restart">需要重启酷市场才能应用更改</string>
     <string name="action_kill">强制退出</string>
+    <string name="action_about">关于</string>
     <string name="err_need_root">需要Root权限</string>
 
     <string name="settings_hide_bottom_bar">隐藏底栏</string>
+    <string name="settings_hide_bottom_bar_summary">虽然MD规范有底栏，但酷友们总觉得是IOS搬来的</string>
     <string name="settings_disable_splash">跳过启动页</string>
+    <string name="settings_disable_splash_summary">尽管现在已经只有新图是显示了，但还是觉得不爽</string>
     <string name="settings_replace_icon">替换图标</string>
+    <string name="settings_replace_icon_summary">酷市场酷不酷</string>
     <string name="settings_model_settings">模块设置</string>
     <string name="settings_hide_icon">隐藏图标</string>
+    <string name="settings_hide_icon_summary">像作者这样洁癖看着桌面上有个图标咋都不舒服..\.</string>
     <string name="settings_developers">开发者</string>
     <string name="settings_libs">使用的开源库</string>
+    <string name="settings_nav_drawer">导航抽屉</string>
+    <string name="settings_nav_enable">启用导航抽屉</string>
+    <string name="settings_nav_enable_summary">从屏幕左右边缘（取决于下面的设置）向中间滑动打开抽屉</string>
+    <string name="settings_nav_right">从右到左</string>
+    <string name="settings_nav_right_summary">小编说：有许多人右手持手机..\.</string>
 
     <string name="text_not_change">不做修改</string>
     <string name="action_restart">重启酷市场</string>
@@ -23,21 +33,24 @@
     <string name="text_killed">已强行停止</string>
 
     <integer-array name="support_cool_apk_version_code">
-        <item>1611022</item>
-        <item>1611082</item>
+        <item>1610313</item><!-- V7 beta1 -->
+        <item>1611022</item><!-- V7 beta2 -->
+        <item>1611082</item><!-- V7 beta3 -->
+        <item>1611092</item><!-- V7 beta4 -->
     </integer-array>
     
     <string-array name="developers">
         <item>liangyuteng0927>开发者>http://coolapk.com/u/543424</item>
         <item>iVanilla>开发者>http://coolapk.com/u/651701</item>
         <item>枫羽柠痕Ice>图标制作>http://coolapk.com/u/482620</item>
-        <item>GitHub>本项目开源在GitHub>Log.d(TAG, "onCreate: Bug upload enable");</item>
+        <item>GitHub>本项目开源在GitHub>https://github.com/liangyuteng0927/CoolApkToolbox</item>
     </string-array>
 
     <string-array name="libs">
         <item>libsuperuser>https://github.com/Chainfire/libsuperuser</item>
         <item>XposedBridge>https://github.com/rovo89/XposedBridge</item>
         <item>snackbar>https://github.com/MrEngineer13/SnackBar</item>
+        <item>开源项目：WechatMod>https://github.com/shenm233/WechatMOD</item>
     </string-array>
 
     <string name="err_open_url">无法打开网址</string>

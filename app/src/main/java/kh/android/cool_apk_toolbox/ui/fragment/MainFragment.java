@@ -1,40 +1,30 @@
-package kh.android.cool_apk_toolbox.ui;
+package kh.android.cool_apk_toolbox.ui.fragment;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.github.mrengineer13.snackbar.SnackBar;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
 import kh.android.cool_apk_toolbox.HookClass;
-import kh.android.cool_apk_toolbox.HookEntry;
+import kh.android.cool_apk_toolbox.hook.HookEntry;
 import kh.android.cool_apk_toolbox.R;
+import kh.android.cool_apk_toolbox.ui.activity.LaunchActivity;
 
 import static android.content.Context.MODE_WORLD_READABLE;
 
@@ -48,6 +38,7 @@ import static android.content.Context.MODE_WORLD_READABLE;
 public class MainFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
     ArrayList<String> mStrArrayIconListText;
     ArrayList<String> mStrArrayIconListKey;
+    SnackBar mSnackBarAskForKill;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,47 +73,6 @@ public class MainFragment extends PreferenceFragment implements SharedPreference
         for (int i = 0; i < mStrArrayIconListKey.size(); i ++)
             strKey[i] = mStrArrayIconListKey.get(i);
         preference_icon.setEntryValues(strKey);
-
-        PreferenceCategory category_developers = (PreferenceCategory)findPreference("developers");
-        for (final String s : getResources().getStringArray(R.array.developers)) {
-            Preference preference = new Preference(getActivity());
-            preference.setTitle(s.split(">")[0]);
-            preference.setSummary(s.split(">")[1]);
-            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    startUrl(s.split(">")[2]);
-                    return true;
-                }
-            });
-            category_developers.addPreference(preference);
-        }
-        getPreferenceScreen().addPreference(category_developers);
-
-        PreferenceCategory category_libs = (PreferenceCategory)findPreference("libs");
-        for (final String s : getResources().getStringArray(R.array.libs)) {
-            Preference preference = new Preference(getActivity());
-            preference.setTitle(s.split(">")[0]);
-            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    startUrl(s.split(">")[1]);
-                    return true;
-                }
-            });
-            category_libs.addPreference(preference);
-        }
-        getPreferenceScreen().addPreference(category_libs);
-    }
-    private void startUrl (String url) {
-        try {
-            Intent intent = new Intent();
-            intent.setAction("android.intent.action.VIEW");
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            new SnackBar.Builder(getActivity()).withMessageId(R.string.err_open_url).show();
-        }
     }
     @Override
     public void onResume() {
@@ -137,8 +87,11 @@ public class MainFragment extends PreferenceFragment implements SharedPreference
     public static final String PATH_CURRENT_ICON = Environment.getExternalStorageDirectory().getPath() + "/Pictures/coolapk_icon.png";
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if (!s.equals(HookClass.PREFS_HIDE_ICON))
-            new SnackBar.Builder(getActivity())
+        if (!s.equals(HookClass.PREFS_HIDE_ICON)) {
+            if (mSnackBarAskForKill != null) {
+                mSnackBarAskForKill.hide();
+            }
+            mSnackBarAskForKill = new SnackBar.Builder(getActivity())
                     .withMessageId(R.string.text_need_restart)
                     .withActionMessageId(R.string.action_kill)
                     .withOnClickListener(new SnackBar.OnMessageClickListener() {
@@ -147,6 +100,7 @@ public class MainFragment extends PreferenceFragment implements SharedPreference
                             forceStop(getActivity(), false);
                         }
                     }).show();
+        }
         switch (s) {
             case HookClass.PREFS_REPLACE_ICON :
                 new File(PATH_CURRENT_ICON).delete();

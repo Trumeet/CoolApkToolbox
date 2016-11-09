@@ -1,4 +1,4 @@
-package kh.android.cool_apk_toolbox.ui;
+package kh.android.cool_apk_toolbox.ui.activity;
 
 import android.Manifest;
 import android.content.ContextWrapper;
@@ -11,8 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import kh.android.cool_apk_toolbox.HookEntry;
+import kh.android.cool_apk_toolbox.hook.HookEntry;
 import kh.android.cool_apk_toolbox.R;
+import kh.android.cool_apk_toolbox.ui.fragment.AboutFragment;
+import kh.android.cool_apk_toolbox.ui.fragment.MainFragment;
 
 /**
  * Project CoolAPKToolBox
@@ -61,11 +63,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    private boolean mIsShowAbout = false;
     @Override
     public boolean onOptionsItemSelected (MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_restart :
                 return MainFragment.forceStop(MainActivity.this, true);
+            case R.id.action_about :
+                if (mIsShowAbout) {
+                    getFragmentManager().beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
+                } else {
+                    getFragmentManager().beginTransaction().replace(R.id.content_frame, new AboutFragment()).commit();
+                }
+                mIsShowAbout = !mIsShowAbout;
+                return true;
         }
         return false;
     }

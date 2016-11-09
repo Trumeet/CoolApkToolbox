@@ -1,1 +1,2 @@
-include ':app'
+include ':app', ':Drawer'
+project(':Drawer').projectDir = new File('MaterialDrawer')

@@ -2,17 +2,11 @@ package kh.android.cool_apk_toolbox;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.XResources;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +22,11 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import kh.android.cool_apk_toolbox.ui.MainActivity;
+import kh.android.cool_apk_toolbox.hook.HookEntry;
+import kh.android.cool_apk_toolbox.hook.NavigationDrawerHook;
+import kh.android.cool_apk_toolbox.ui.activity.MainActivity;
 
-import static kh.android.cool_apk_toolbox.HookEntry.PKG_COOLAPK;
+import static kh.android.cool_apk_toolbox.hook.HookEntry.PKG_COOLAPK;
 
 /**
  * Project CoolAPKToolBox
@@ -53,6 +49,7 @@ public class HookClass implements IXposedHookZygoteInit, IXposedHookLoadPackage,
     private Context mContextTarget;
     private Resources mRes;
     private Context mContext;
+    private Context mContextTargetMainActivity;
     @Override
     public void initZygote(StartupParam startupParam) throws Throwable {
         XposedBridge.log(TAG + "Module Loaded");
@@ -99,42 +96,44 @@ public class HookClass implements IXposedHookZygoteInit, IXposedHookLoadPackage,
                 }
             }
         });
+        XposedHelpers.findAndHookMethod(PKG_COOLAPK + HookEntry.CLASS_MAIN_ACTIVITY, loadPackageParam.classLoader
+                , HookEntry.METHOD_CREATE, Bundle.class, new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        XposedBridge.log(TAG + "onCreate called");
+                        prefs.reload();
+                        if (prefs.getBoolean(PREFS_HIDE_BOTTOM_BAR, false)) {
+                            XposedBridge.log(TAG + "Adding navigation drawer...");
+                            Activity activity = (Activity)param.thisObject;
+                            new NavigationDrawerHook().addNavigationDrawer(activity, mContext);
+                        } else {
+                            XposedBridge.log(TAG + "Add navigation drawer disabled, skipping");
+                        }
+
+                    }
+                });
 
         // 隐藏底栏
         XposedHelpers.findAndHookMethod(PKG_COOLAPK + HookEntry.CLASS_MAIN_FRAGMENT, loadPackageParam.classLoader, HookEntry.METHOD_CREATE_VIEW, LayoutInflater.class, ViewGroup.class, Bundle.class, new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                XposedBridge.log(TAG + "onCreateView called");
-                prefs.reload();
-                if (prefs.getBoolean(PREFS_HIDE_BOTTOM_BAR, false)) {
-                    // 隐藏底栏
-                    XposedBridge.log(TAG + "Hiding bottom bar");
-                    int id_bottom = mResTarget.getIdentifier("bottom_navigation", "id", PKG_COOLAPK);
-                    View view_bottom_bar = ((View)param.getResult()).findViewById(id_bottom);
-                    XposedBridge.log(TAG + "Bottom bar id=" + id_bottom);
-                    XposedBridge.log(TAG + "Bottom bar view=" + view_bottom_bar);
-                    view_bottom_bar.setVisibility(View.GONE);
-                    // 添加抽屉
-                    /*
-                    XposedBridge.log(TAG + "Adding navigation drawer");
-                    int id_toolbar = mResTarget.getIdentifier("toolbar", "id", PKG_COOLAPK);
-                    XposedBridge.log(TAG + "toolbar id=" + id_toolbar);
-                    Toolbar toolbar = (Toolbar) ((View)param.getResult()).findViewById(id_toolbar);
-                    XposedBridge.log(TAG + "toolbar view=" + id_toolbar);
-                    final DrawerLayout drawerLayout = new DrawerLayout(((Fragment)param.thisObject).getActivity());
-                    ((ViewGroup)param.args[2]).addView(drawerLayout);
-                    ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                            ((Fragment)param.thisObject).getActivity(),
-                            drawerLayout,toolbar,
-                            mRes.getIdentifier("nav_open", "id", AppMain.class.getPackage().getName())
-                            , mRes.getIdentifier("nav_close", "id", AppMain.class.getPackage().getName()));
-                    //toggle.setHomeAsUpIndicator(upArrow);
-                    drawerLayout.setDrawerListener(toggle);
-                    toggle.syncState();
-                    */
-                }else {
-                    XposedBridge.log(TAG + "Hide bottom bar disabled, skipping");
-                }
+                    XposedBridge.log(TAG + "onCreateView called");
+                    prefs.reload();
+                    if (prefs.getBoolean(PREFS_HIDE_BOTTOM_BAR, false)) {
+                        // 隐藏底栏
+                        XposedBridge.log(TAG + "Hiding bottom bar");
+                        int id_bottom = mResTarget.getIdentifier("bottom_navigation", "id", PKG_COOLAPK);
+                        View view_bottom_bar = ((View)param.getResult()).findViewById(id_bottom);
+                        XposedBridge.log(TAG + "Bottom bar id=" + id_bottom);
+                        XposedBridge.log(TAG + "Bottom bar view=" + view_bottom_bar);
+                        view_bottom_bar.setVisibility(View.GONE);
+
+                        //Context context = view_bottom_bar.getContext();
+                        //View view = (View)param.getResult();
+                        //((ViewGroup)view.getParent()).removeAllViews()
+                    }else {
+                        XposedBridge.log(TAG + "Hide bottom bar disabled, skipping");
+                    }
             }
         });
 
@@ -147,15 +146,13 @@ public class HookClass implements IXposedHookZygoteInit, IXposedHookLoadPackage,
                         prefs.reload();
                         if (prefs.getBoolean(PREFS_DISABLE_SPLASH, false)) {
                             Activity activity = (Activity) param.thisObject;
-                            activity.startActivity(new Intent(activity, XposedHelpers.findClass(HookEntry.PKG_COOLAPK + HookEntry.CLASS_MAIN_ACTIVITY, loadPackageParam.classLoader)));
+                            //activity.startActivity(new Intent(activity, XposedHelpers.findClass(HookEntry.PKG_COOLAPK + HookEntry.CLASS_MAIN_ACTIVITY, loadPackageParam.classLoader)));
                             activity.finish();
                         } else {
                             XposedBridge.log(TAG + "Disable splash disabled, skipping");
                         }
                     }
                 });
-
-
     }
     @Override
     public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam initPackageResourcesParam) throws Throwable {

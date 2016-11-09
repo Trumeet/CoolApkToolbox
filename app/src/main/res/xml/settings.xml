@@ -3,28 +3,39 @@
     <PreferenceCategory
         android:title="@string/app_name">
         <SwitchPreference
+            android:summary="@string/settings_hide_bottom_bar_summary"
             android:key="hide_bottom_bar"
             android:title="@string/settings_hide_bottom_bar"
             android:defaultValue="false" />
         <SwitchPreference
+            android:summary="@string/settings_disable_splash_summary"
             android:key="disable_splash"
             android:title="@string/settings_disable_splash"
             android:defaultValue="false" />
         <ListPreference
+            android:summary="@string/settings_replace_icon_summary"
             android:key="replace_icon"
             android:title="@string/settings_replace_icon" />
     </PreferenceCategory>
     <PreferenceCategory
+        android:title="@string/settings_nav_drawer">
+        <SwitchPreference
+            android:key="enable_nav"
+            android:title="@string/settings_nav_enable"
+            android:summary="@string/settings_nav_enable_summary"
+            android:defaultValue="false" />
+        <SwitchPreference
+            android:key="nav_right"
+            android:title="@string/settings_nav_right"
+            android:summary="@string/settings_nav_right_summary"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+    <PreferenceCategory
         android:title="@string/settings_model_settings">
         <SwitchPreference
+            android:summary="@string/settings_hide_icon"
             android:defaultValue="false"
             android:key="hide_icon"
             android:title="@string/settings_hide_icon" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/settings_developers"
-        android:key="developers" />
-    <PreferenceCategory
-        android:title="@string/settings_libs"
-        android:key="libs" />
 </PreferenceScreen>

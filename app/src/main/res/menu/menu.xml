@@ -6,4 +6,9 @@
         android:title="@string/action_restart"
         android:icon="@drawable/ic_refresh_black_24dp"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_about"
+        android:title="@string/action_about"
+        android:icon="@drawable/ic_info_black_24dp"
+        app:showAsAction="ifRoom"/>
 </menu>

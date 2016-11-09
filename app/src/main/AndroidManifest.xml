@@ -24,14 +24,14 @@
 
         <meta-data android:value="e88ec01c47509fb63b5cc0b5182f9bf0" android:name="BUG_HD_SDK_GENERAL_KEY" />
 
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="de.robv.android.xposed.category.MODULE_SETTINGS" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.LaunchActivity">
+        <activity android:name=".ui.activity.LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
