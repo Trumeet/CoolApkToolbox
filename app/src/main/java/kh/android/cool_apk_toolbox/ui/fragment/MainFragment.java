@@ -10,8 +10,7 @@ import android.os.Parcelable;
 import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
-
-import com.github.mrengineer13.snackbar.SnackBar;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,7 +37,6 @@ import static android.content.Context.MODE_WORLD_READABLE;
 public class MainFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
     ArrayList<String> mStrArrayIconListText;
     ArrayList<String> mStrArrayIconListKey;
-    SnackBar mSnackBarAskForKill;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,18 +86,7 @@ public class MainFragment extends PreferenceFragment implements SharedPreference
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         if (!s.equals(HookClass.PREFS_HIDE_ICON)) {
-            if (mSnackBarAskForKill != null) {
-                mSnackBarAskForKill.hide();
-            }
-            mSnackBarAskForKill = new SnackBar.Builder(getActivity())
-                    .withMessageId(R.string.text_need_restart)
-                    .withActionMessageId(R.string.action_kill)
-                    .withOnClickListener(new SnackBar.OnMessageClickListener() {
-                        @Override
-                        public void onMessageClick(Parcelable token) {
-                            forceStop(getActivity(), false);
-                        }
-                    }).show();
+            Toast.makeText(getActivity(), R.string.text_need_restart, Toast.LENGTH_SHORT).show();
         }
         switch (s) {
             case HookClass.PREFS_REPLACE_ICON :
@@ -118,13 +105,7 @@ public class MainFragment extends PreferenceFragment implements SharedPreference
                         sharedPreferences.edit().putString(HookClass.PREFS_ICON_SAVE_PATH, PATH_CURRENT_ICON).apply();
                     }
                     catch (final Exception e){
-                        new SnackBar.Builder(getActivity()).withMessageId(R.string.err).withOnClickListener(new SnackBar.OnMessageClickListener() {
-                            @Override
-                            public void onMessageClick(Parcelable token) {
-                                new AlertDialog.Builder(getActivity()).setTitle(R.string.err).setMessage(e.getMessage())
-                                        .show();
-                            }
-                        }).show();
+                        Toast.makeText(getActivity(), R.string.err, Toast.LENGTH_SHORT).show();
                         sharedPreferences.edit().putString(HookClass.PREFS_ICON_SAVE_PATH, null).apply();
                     }
                 } else {
@@ -146,7 +127,7 @@ public class MainFragment extends PreferenceFragment implements SharedPreference
     }
     public static boolean forceStop (Activity context, final boolean restart) {
         if (!Shell.SU.available()) {
-            new SnackBar.Builder(context).withMessageId(R.string.err_need_root).show();
+            Toast.makeText(context, R.string.err_need_root, Toast.LENGTH_SHORT).show();
             return false;
         }
         new Thread(new Runnable() {
@@ -157,7 +138,7 @@ public class MainFragment extends PreferenceFragment implements SharedPreference
                     Shell.SU.run("am start -n " + HookEntry.PKG_COOLAPK + "/" + HookEntry.PKG_COOLAPK + HookEntry.CLASS_MAIN_ACTIVITY);
             }
         }).start();
-        new SnackBar.Builder(context).withMessageId(R.string.text_killed).show();
+        Toast.makeText(context, R.string.text_killed, Toast.LENGTH_SHORT).show();
         return true;
     }
 }

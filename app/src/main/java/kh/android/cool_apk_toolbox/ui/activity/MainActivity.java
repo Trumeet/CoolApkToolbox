@@ -1,15 +1,16 @@
 package kh.android.cool_apk_toolbox.ui.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContextWrapper;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toolbar;
 
 import kh.android.cool_apk_toolbox.hook.HookEntry;
 import kh.android.cool_apk_toolbox.R;
@@ -23,13 +24,13 @@ import kh.android.cool_apk_toolbox.ui.fragment.MainFragment;
  * Edited by 宇腾
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
     private static final int RC_REQUEST_PERMISSION = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_layout);
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         String subTitle = "";
         if (!isEnabled())
@@ -52,9 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        toolbar.setSubtitle(subTitle);
-
-        setSupportActionBar(toolbar);
+        getActionBar().setSubtitle(subTitle);
         getFragmentManager().beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
 
         if (Build.VERSION.SDK_INT >= 23) {
@@ -102,6 +101,15 @@ public class MainActivity extends AppCompatActivity {
             return getPackageManager().getPackageInfo(packageName, 0);
         } catch (PackageManager.NameNotFoundException e) {
             return null;
+        }
+    }
+    @Override
+    public void onBackPressed () {
+        if (mIsShowAbout) {
+            getFragmentManager().beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
+            mIsShowAbout = false;;
+        } else {
+            super.onBackPressed();
         }
     }
 }
